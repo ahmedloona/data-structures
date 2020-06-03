@@ -1,6 +1,7 @@
-class minHeap {
-    constructor(values) {
+class PQ {
+    constructor(values, compare = (el1, el2) => el1 < el2) { // pass in compare function to convert to maxHeap
         this.values = values;
+        this.compare = compare;
         this.heapSize = 0;
         this.heap = [];
         this.createHeap();
@@ -31,13 +32,13 @@ class minHeap {
         const parent = this.heap[pIndex];
         const currEl = this.heap[index];
         
-        if (parent > currEl) {
+        if (this.compare(currEl, parent)) {
             this.swapElements(pIndex, index)
             this.bubbleUp(pIndex);
         }
     }
     
-    // poll highest priority (min) element from heap in O(log n)
+    // poll highest priority element from heap in O(log n)
     pollElement() {
 
         if (this.heapSize === 0) return;
@@ -47,45 +48,45 @@ class minHeap {
         const polled = this.heap.pop();
         this.heapSize -= 1;
 
-        if(this.size > 1) this.bubbleDown(0);
+        if(this.heapSize > 1) this.bubbleDown(0);
         return polled;
     }
     
     // restore heap invariant on polling element
     bubbleDown(index) {
         
-        // get index of the smallest element (among parent, left child, right child)
-        const indexOfSmallestNode = this.getSmallestElementsIndex(index);
+        // get index of the element to replace (among parent, left child, right child)
+        const indexToBubbleDownTo = this.getIndexToBubbleDownTo(index);
 
-        // if the parent is the smallest, return because no bubble-down needed
-        if (indexOfSmallestNode === index) return;
+        // if the parent is the element to replace, return because no bubble-down needed
+        if (indexToBubbleDownTo === index) return;
         
-        // swap parent with left child or right child, whichever has the smaller value
-        this.swapElements(index, indexOfSmallestNode);
+        // swap parent with left child or right child, whichever is the index to bubble down to
+        this.swapElements(index, indexToBubbleDownTo);
 
-        // after swapping try to bubble down further
-        this.bubbleDown(indexOfSmallestNode);
+        // after bubbling down a level, try to bubble down further
+        this.bubbleDown(indexToBubbleDownTo);
     }
     
-    getSmallestElementsIndex(index) {
+    getIndexToBubbleDownTo(index) {
         const [leftChildIndex, rightChildIndex] = [2 * index + 1, 2 * index + 2];
         const hasLeftChild = leftChildIndex < this.heapSize;
         const hasRightChild = rightChildIndex < this.heapSize;
 
         // start with assuming that the parent is has the minimum value
-        let indexOfSmallest = index;
+        let indexToBubbleDownTo = index;
         
         // if there exists a right child with value smaller than the parent, reassign indexOdSmallest to rightChildIndex
-        if (hasRightChild && this.heap[rightChildIndex] < this.heap[indexOfSmallest]) {
-            indexOfSmallest = rightChildIndex;
+        if (hasRightChild && this.compare(this.heap[rightChildIndex], this.heap[indexToBubbleDownTo])) {
+            indexToBubbleDownTo = rightChildIndex;
         }
         
-        // if there exists a left child with value even smaller than value at indexOfSmallet, reassign indexOfSmallest to leftChildIndex
-        if (hasLeftChild && this.heap[leftChildIndex] < this.heap[indexOfSmallest]) {
-            indexOfSmallest = leftChildIndex
+        // if there exists a left child with value even smaller than value at indexOfSmallet, reassign indexToBubbleDownTo to leftChildIndex
+        if (hasLeftChild && this.compare(this.heap[leftChildIndex] , this.heap[indexToBubbleDownTo])) {
+            indexToBubbleDownTo = leftChildIndex
         }
         
-        return indexOfSmallest;
+        return indexToBubbleDownTo;
     }
 
     swapElements(indexOne, indexTwo) {
@@ -100,7 +101,8 @@ class minHeap {
     }
 }
 
-const h = new minHeap([7, 5, 8, 1, 2, 6, 7, 3]);
+// test min heap (default)
+const h = new PQ([7, 5, 8, 1, 2, 6, 7, 3]);
 
 console.log(h.heap)
 
@@ -131,5 +133,36 @@ console.log(h.heap)
 h.pollElement()
 console.log(h.heap)
 
+// test max heap (custom comparator)
+const h1 = new PQ([7, 5, 8, 1, 2, 6, 7, 3], (el1, el2) => el1 > el2);
+
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
+
+h1.pollElement()
+console.log(h1.heap)
 
 
