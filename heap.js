@@ -9,10 +9,7 @@ class minHeap {
     // build the heap in O(n log n)
     createHeap() {
         this.values.forEach(v => {
-            this.heap.push(v);
-            this.heapSize += 1;
-            const index = this.heapSize - 1;
-            this.bubbleUp(index);
+            this.addElement(v);
         });
     }
 
@@ -42,12 +39,15 @@ class minHeap {
     
     // poll highest priority (min) element from heap in O(log n)
     pollElement() {
+
         if (this.heapSize === 0) return;
+
         const lastLeafIndex = this.heapSize - 1;
         this.swapElements(0, lastLeafIndex)
         const polled = this.heap.pop();
         this.heapSize -= 1;
-        this.bubbleDown(0);
+
+        if(this.size > 1) this.bubbleDown(0);
         return polled;
     }
     
@@ -93,6 +93,10 @@ class minHeap {
         const valueTwo = this.heap[indexTwo];
         this.heap[indexOne] = valueTwo;
         this.heap[indexTwo] = valueOne;
+    }
+
+    peek() {
+        return this.heap[0];
     }
 }
 
