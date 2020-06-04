@@ -1,5 +1,5 @@
 class PQ {
-    constructor(values, compare = (el1, el2) => el1 < el2) { // pass in compare function to convert to maxHeap
+    constructor(values, compare = (el1, el2) => el1.key < el2.key) { // pass in compare function to convert to maxHeap
         this.values = values;
         this.compare = compare;
         this.heapSize = 0;
@@ -25,13 +25,14 @@ class PQ {
     // restore heap invariant on new element add
     bubbleUp(index) {
         
-        const pIndex = Math.floor((index - 1) / 2);
-        const isRoot = pIndex === index;
+        const isRoot = index === 0;
         if (isRoot) return;
+
+        const pIndex = Math.floor((index - 1) / 2);
         
         const parent = this.heap[pIndex];
         const currEl = this.heap[index];
-        
+
         if (this.compare(currEl, parent)) {
             this.swapElements(pIndex, index)
             this.bubbleUp(pIndex);
@@ -102,7 +103,7 @@ class PQ {
 }
 
 // test min heap (default)
-const h = new PQ([7, 5, 8, 1, 2, 6, 7, 3]);
+const h = new PQ([{key: 7}, {key: 5}, {key: 8}, {key: 1}, {key: 2}, {key: 6}, {key: 7}, {key: 3}], (el1, el2) => el1.key > el2.key);
 
 console.log(h.heap)
 
@@ -134,7 +135,7 @@ h.pollElement()
 console.log(h.heap)
 
 // test max heap (custom comparator)
-const h1 = new PQ([7, 5, 8, 1, 2, 6, 7, 3], (el1, el2) => el1 > el2);
+const h1 = new PQ([{key: 7}, {key: 5}, {key: 8}, {key: 1}, {key: 2}, {key: 6}, {key: 7}, {key: 3}]);
 
 console.log(h1.heap)
 
