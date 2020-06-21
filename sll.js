@@ -64,17 +64,6 @@ class LinkedList {
         return true;
     }
 
-    getPointerToPrev(index) {
-        let currIndex = -1;
-        let pointer = this.dummyHead;
-        while (currIndex !== index - 1) {
-            pointer = pointer.next;
-            currIndex += 1;
-        }
-
-        return pointer;
-    }
-
     // DELETION
     // return head
     deleteHead() {
@@ -172,6 +161,17 @@ class LinkedList {
     // return number
     size() {
         return this.length;
+    }
+
+    getPointerToPrev(index) {
+        let currIndex = -1;
+        let pointer = this.dummyHead;
+        while (currIndex !== index - 1) {
+            pointer = pointer.next;
+            currIndex += 1;
+        }
+
+        return pointer;
     }
 
     isIndexInvalid(index) {
